@@ -2,24 +2,30 @@ TOP_ROW_KEYBOARD = set("qwertyuiop")
 MIDDLE_ROW_KEYBOARD = set("asdfghjkl")
 BOTTOM_ROW_KEYBOARD = set("zxcvbnm")
 
-# insert all the words in the resources/states.txt file to a set
-states = set()
-with open("resources/states.txt", "r") as f:
-    for line in f:
-        states.add(line.strip().lower())
 
-
-def find_special_state() -> str:
+def find_special_state(file_path: str) -> str:
     """
     @summary:
-        return the first state that its name is typed using only one row of the keyboard
+        return the first line from a file that all his words contains only one row of the keyboard
+    @param file_path: str
+        The path to the file that we will check
     @return: str
-        The first state that its name is typed using only one row of the keyboard
+        The first line from a file that all his words contains only one row of the keyboard
     """
-    for state in states:
-        if TOP_ROW_KEYBOARD.issuperset(state) or MIDDLE_ROW_KEYBOARD.issuperset(state) or BOTTOM_ROW_KEYBOARD.issuperset(state):
-            return state
+    set_of_rows = set()
+    try:
+        with open(file_path, "r") as file:
+            for line in file:
+                set_of_rows.add(line.strip().lower())
+
+        for row in set_of_rows:
+            if TOP_ROW_KEYBOARD.issuperset(row) or MIDDLE_ROW_KEYBOARD.issuperset(
+                    row) or BOTTOM_ROW_KEYBOARD.issuperset(row):
+                return row
+    except FileNotFoundError:
+        print("File not found")
 
 
 if __name__ == "__main__":
-    print(find_special_state())
+    path_states_file = "resources/statehs.txt"
+    print(find_special_state(path_states_file))
